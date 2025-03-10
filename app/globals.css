@@ -1,26 +1,52 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
+html,
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+    height: 100%;
+}
+
+#playlist {
+    background-color: #f8f9fa;
+    padding: 15px;
+    max-height: 100vh;
+    overflow-y: auto;
+}
+
+#videoPlayer {
+    width: 100%;
+    height: auto;
+}
+
+.tv-logo {
+    width: 100px;
+}
+
+.channel {
+    cursor: pointer;
+}
+
+.channel:hover {
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    transition: box-shadow 0.3s ease-in-out;
+}
+
+.billed-msg {
+    position: fixed;
+    bottom: 10px;
+    right: 10px;
+    background-color: #333;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+}
+
+#recentPlayedList {
+    background-color: rgba(0, 0, 0, 0.1);
+    padding: 10px;
+    border-radius: 15px;
+    margin-top: 5px;
+    margin-bottom: 10px;
+    max-width: 100vh;
+    overflow-x: auto;
 }
