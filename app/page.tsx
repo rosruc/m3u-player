@@ -15,7 +15,12 @@ export default function Home() {
     return (
         <div className="h-full w-full ">
             <div className="flex flex-col md:flex-row h-full justify-center">
-                <div className="md:w-1/5 md:order-1">
+
+                <div className="md:w-1/5 md:order-1 overflow-y-auto scrollbar-hide">
+                    <M3uUrlInput
+                        setPlaylistItems={setPlaylistItems}
+                        setBilledMsg={setBilledMsg}
+                    />
                     <Playlist
                         items={playlistItems}
                         onItemSelect={setCurrentVideo}
@@ -23,12 +28,13 @@ export default function Home() {
                 </div>
 
                 <div className="md:w-10/12 md:order-2">
-                    <div className="flex flex-col space-y-4">
-                        <div className="order-2 md:order-1">
-                            <M3uUrlInput
-                                setPlaylistItems={setPlaylistItems}
-                                setBilledMsg={setBilledMsg}
-                            />
+                    <div className="flex flex-col">
+                        <div className="order-2 md:order-1 py-3 px-2">
+                            {currentVideo && (
+                                <div className="text-xl font-semibold">
+                                    {currentVideo.name || currentVideo.tvgName || 'Untitled Stream'}
+                                </div>
+                            )}
                         </div>
 
                         <div className="order-1 md:order-2">

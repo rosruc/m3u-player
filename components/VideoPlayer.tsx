@@ -69,7 +69,7 @@ export default function VideoPlayer({ currentVideo }: VideoPlayerProps) {
             ref={videoRef}
             controls
             autoPlay
-            className="w-full"
+            className="w-full "
         />
     );
 } 
