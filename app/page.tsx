@@ -1,14 +1,22 @@
 'use client';
 
+import dynamic from 'next/dynamic';
 import { useState } from 'react';
-import VideoPlayer from '@/components/VideoPlayer';
-import DVideoPlayer from '@/components/DVideoPlayer';
 import Playlist from '@/components/Playlist';
 import M3uUrlInput from '@/components/M3uUrlInput';
 import RecentPlayed from '@/components/RecentPlayed';
 import { PlaylistItem } from '@/types/types';
-import ArtPlayer from '@/components/ArtPlayer';
-import PlyrVideoPlayer from '@/components/PlyrVideoPlayer';
+
+// Dynamically import video players with no SSR
+const VideoPlayer = dynamic(() => import('@/components/VideoPlayer'), {
+    ssr: false
+});
+const ArtPlayer = dynamic(() => import('@/components/ArtPlayer'), {
+    ssr: false
+});
+const PlyrVideoPlayer = dynamic(() => import('@/components/PlyrVideoPlayer'), {
+    ssr: false
+});
 
 export default function Home() {
     const [playlistItems, setPlaylistItems] = useState<PlaylistItem[]>([]);
