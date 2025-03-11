@@ -1,8 +1,7 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
-// import shaka from 'shaka-player';
-import shaka from 'shaka-player/dist/shaka-player.compiled';
+import Hls from 'hls.js';
 import { PlaylistItem } from '@/types/types';
 
 interface VideoPlayerProps {
@@ -11,53 +10,47 @@ interface VideoPlayerProps {
 
 export default function VideoPlayer({ currentVideo }: VideoPlayerProps) {
     const videoRef = useRef<HTMLVideoElement>(null);
-    const playerRef = useRef<shaka.Player | null>(null);
+    const hlsRef = useRef<Hls | null>(null);
 
     useEffect(() => {
-        if (!videoRef.current) return;
+        if (!videoRef.current || !currentVideo?.source) return;
 
         const initPlayer = async () => {
-            if (playerRef.current) {
-                await playerRef.current.destroy();
+            // 清理现有的 HLS 实例
+            if (hlsRef.current) {
+                hlsRef.current.destroy();
             }
 
-            try {
-                playerRef.current = new shaka.Player(videoRef.current);
+            // 检查浏览器是否支持 HLS
+            if (Hls.isSupported()) {
+                try {
+                    const hls = new Hls();
+                    hlsRef.current = hls;
 
-                if (currentVideo?.key) {
-                    const { key } = currentVideo;
-                    if (key.license_type === 'clearkey' && key.license_key) {
-                        playerRef.current.configure({
-                            drm: {
-                                servers: {
-                                    'org.w3.clearkey': key.license_key
-                                }
-                            }
-                        });
-                    } else if (key.key_id && key.key) {
-                        playerRef.current.configure({
-                            drm: {
-                                clearKeys: {
-                                    [key.key_id]: key.key
-                                }
-                            }
-                        });
-                    }
-                }
+                    hls.loadSource(currentVideo.source);
+                    hls.attachMedia(videoRef.current as HTMLMediaElement);
 
-                if (currentVideo?.source) {
-                    await playerRef.current.load(currentVideo.source);
+                    hls.on(Hls.Events.MANIFEST_PARSED, () => {
+                        videoRef.current?.play();
+                    });
+
+                    hls.on(Hls.Events.ERROR, (event, data) => {
+                        console.error('HLS error:', data);
+                    });
+                } catch (error) {
+                    console.error('Error initializing HLS:', error);
                 }
-            } catch (error) {
-                console.error('Error initializing player:', error);
+            } else if (videoRef.current?.canPlayType('application/vnd.apple.mpegurl')) {
+                // 对于原生支持 HLS 的浏览器（如 Safari）
+                videoRef.current.src = currentVideo.source;
             }
         };
 
         initPlayer();
 
         return () => {
-            if (playerRef.current) {
-                playerRef.current.destroy();
+            if (hlsRef.current) {
+                hlsRef.current.destroy();
             }
         };
     }, [currentVideo]);
@@ -69,7 +62,10 @@ export default function VideoPlayer({ currentVideo }: VideoPlayerProps) {
             ref={videoRef}
             controls
             autoPlay
-            className="w-full "
+            className="w-full"
+            controlsList="nodownload"
+            playsInline
+            muted={false}
         />
     );
 } 

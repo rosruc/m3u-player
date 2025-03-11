@@ -72,9 +72,10 @@ export default function Playlist({ items, onItemSelect }: PlaylistProps) {
                                 ▶
                             </span>
                         </div>
-
                         <div
-                            ref={el => contentRefs.current[groupName] = el}
+                            ref={(el: HTMLDivElement | null) => {
+                                if (el) contentRefs.current[groupName] = el;
+                            }}
                             className="pl-4 overflow-hidden transition-[height] duration-300 ease-in-out"
                             style={{
                                 height: expandedGroups.includes(groupName)
