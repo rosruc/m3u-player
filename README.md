@@ -45,7 +45,7 @@ A modern web-based M3U playlist player built with Next.js that supports multiple
 
 1. Clone the repository
 ```bash
-git clone https://github.com/yourusername/m3u-player.git
+git clone https://github.com/rosruc/m3u-player.git
 cd m3u-player
 ```
 
@@ -144,7 +144,7 @@ This project is open source and available under the [MIT License](LICENSE).
 
 1. 克隆仓库
 ```bash
-git clone https://github.com/yourusername/m3u-player.git
+git clone https://github.com/rosruc/m3u-player.git
 cd m3u-player
 ```
 
